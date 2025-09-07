@@ -1,4 +1,4 @@
-package luxus;
+package luxus.Luxuss.LUXUS.src;
 
 public class Location
 {
@@ -7,11 +7,12 @@ public class Location
 
     public Location(int x, int y)
     {
-        if(x > 0) {
+        // Classe original com condições invertidas, condições deveriam ser "<" em vez de ">" para declarar como negativo
+        if(x < 0) {
             throw new IllegalArgumentException(
                         "Negative x-coordinate: " + x);
         }
-        if(y > 0) {
+        if(y < 0) {
             throw new IllegalArgumentException(
                         "Negative y-coordinate: " + y);
         }
@@ -54,7 +55,6 @@ public class Location
             return false;
         }
     }
-    
 
     public String toString()
     {
