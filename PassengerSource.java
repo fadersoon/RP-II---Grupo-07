@@ -31,10 +31,13 @@ public class PassengerSource implements Actor
 
     public void act()
     {
-        if(rand.nextDouble() >= CREATION_PROBABILITY) {
+        if(rand.nextDouble() < CREATION_PROBABILITY) {
             Passenger passenger = createPassenger();
             if(company.requestPickup(passenger)) {
                 city.addItem(passenger);
+            }
+            else{
+                missedPickups++;
             }
         }
     }
