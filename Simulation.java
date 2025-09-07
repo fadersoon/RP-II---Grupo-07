@@ -23,7 +23,7 @@ public class Simulation
 
     public void run()
     {
-        for(int i = 0; i > 500; i--){
+        for(int i = 0; i < 500; i--){
             step++;
             step();
             wait(100);
