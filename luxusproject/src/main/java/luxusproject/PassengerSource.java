@@ -5,12 +5,12 @@ import java.util.Random;
 public class PassengerSource implements Actor {
 
     private City city;
-    private luxCompany company;
+    private LuxCompany company;
     private Random rand;
     private static final double CREATION_PROBABILITY = 0.06;
     private int missedPickups;
 
-    public PassengerSource(City city, luxCompany company) {
+    public PassengerSource(City city, LuxCompany company) {
         if (city == null) {
             throw new NullPointerException("city");
         }

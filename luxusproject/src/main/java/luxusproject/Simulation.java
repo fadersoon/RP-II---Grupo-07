@@ -13,7 +13,7 @@ public class Simulation {
         actors = new LinkedList<Actor>();
         step = 0;
         City city = new City();
-        luxCompany company = new luxCompany(city);
+        LuxCompany company = new LuxCompany(city);
         PassengerSource source = new PassengerSource(city, company);
 
         actors.addAll(company.getVehicles());
