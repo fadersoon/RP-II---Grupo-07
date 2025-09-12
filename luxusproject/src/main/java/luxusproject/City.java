@@ -3,6 +3,7 @@ package luxusproject;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Collections;
 
 public class City {
 
@@ -33,9 +34,9 @@ public class City {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public Iterator getItems() {
-        return items.iterator();
-    }
+    public List<Item> getItems() {
+    return Collections.unmodifiableList(items);
+}
 
     public void addItem(Item item) {
         if (items.contains(item)) {

@@ -1,10 +1,8 @@
 package luxusproject;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.awt.*;
 import javax.swing.*;
+import java.util.List;
     
 
 public class CityGUI extends JFrame implements Actor
@@ -30,16 +28,15 @@ public class CityGUI extends JFrame implements Actor
     public void act()
     {
         cityView.preparePaint();
-    Iterator<Item> items = city.getItems();
-        while(items.hasNext()) {
-            Item item= items.next();
-            if(item instanceof DrawableItem){
+        List<Item> items = city.getItems();
+        for (Item item : items) {
+            if (item instanceof DrawableItem) {
                 DrawableItem drawable = (DrawableItem) item;
                 Location location = drawable.getLocation();
                 cityView.drawImage(location.getX(), location.getY(), drawable.getImage());
             }
         }
-        cityView.repaint();    
+        cityView.repaint();
     }
     
 
