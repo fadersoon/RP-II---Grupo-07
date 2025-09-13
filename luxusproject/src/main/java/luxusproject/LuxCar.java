@@ -2,97 +2,65 @@ package luxusproject;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import java.util.Objects;
 
-// Adicionei atributos relacionados ao veículo e modifiquei as outras classes para identificar LuxCar como a classe inexistente "Vehicle"
-public class LuxCar implements DrawableItem {
+public class LuxCar extends Vehicle {
 
     private Passenger passenger;
-    private Location location;
-    private Location destination;
-    private LuxCompany company;
-    private Image emptyImage, passengerImage;
+    private final Image emptyImage;
+    private final Image passengerImage;
     private int idleTime;
 
-    // LuxCompany / luxCarCompany - classe errada
     public LuxCar(LuxCompany company, Location location) {
-        // Substitui o super, já que a classe é independente
-        this.company = company;
-        this.location = location;
-        emptyImage = new ImageIcon(getClass().getResource("images/luxCar.jpg")).getImage();
+        super(company, location);
 
-        passengerImage = new ImageIcon(getClass().getResource("images/luxCar+person.jpg")).getImage();
+        this.passenger = null;
+        this.idleTime = 0;
+
+        this.emptyImage = new ImageIcon(getClass().getResource("/images/luxCar.jpg")).getImage();
+        this.passengerImage = new ImageIcon(getClass().getResource("/images/luxCar+person.jpg")).getImage();
     }
 
-    // Metodo criado: getTargetLocation envia o passageiro como parâmetro, devolve as coordenadas dele.
+    @Override
     public void act() {
-            Location target = this.destination;
+        Location target = getDestination();
+
         if (target != null) {
             Location next = getLocation().nextLocation(target);
             setLocation(next);
+
             if (next.equals(target)) {
                 if (passenger != null) {
-                    notifyPassengerArrival(passenger);
+                    System.out.println(getId() + " arrived at the destination with the passenger.");
                     offloadPassenger();
                 } else {
-                    notifyPickupArrival();
+                    System.out.println(getId() + " arrived at the starting point");
                 }
             }
         } else {
-            incrementIdleCount();
+            idleTime++;
         }
     }
 
-    // Adicionei o metodo de aumentar o tempo em que o carro está parado
-    public void incrementIdleCount() {
-        idleTime++;
-    }
-
-    // Getter e setter implementado
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public void notifyPickupArrival() {
-        System.out.println("Pickup arrival!");
-    }
-
-    public void notifyPassengerArrival(Passenger passenger) {
-        System.out.println("Passenger " + passenger.getImage() + " arrival!");
-    }
-
+    @Override
     public boolean isFree() {
-        return passenger == null; // Não precisa retornar boolean em relação a localização do passageiro
+        return passenger == null && getDestination() == null;
     }
 
-    // Adicionei o metodo setter de destino
-    public void setTargetLocation(Location destination) {
-        this.destination = destination;
+    @Override
+    public Image getImage() {
+        return (passenger != null) ? passengerImage : emptyImage;
     }
 
+    @Override
     public void pickup(Passenger passenger) {
         this.passenger = passenger;
-        setTargetLocation(passenger.getDestination());
     }
 
-    // Não precisa de um metodo clearTargetLocation se você já está setando passageiro como null.
+    @Override
     public void offloadPassenger() {
-        passenger = null;
-        destination = null;
+        this.passenger = null;
+        setDestination(null);
     }
 
-    public Image getImage() {
-        if (passenger != null) {
-            return passengerImage;
-        } else {
-            return emptyImage;
-        }
-    }
-
-    public String toString() {
-        return "luxCar at " + getLocation();
-    }
 }
