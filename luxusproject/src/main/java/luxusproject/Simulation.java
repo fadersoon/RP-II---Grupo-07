@@ -1,6 +1,5 @@
 package luxusproject;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Simulation {
     }
 
     public void run() {
-        for (int i = 0; i < 500; i--) {
+        for (int i = 0; i < 500; i++) {
             step++;
             step();
             wait(100);
@@ -39,7 +38,8 @@ public class Simulation {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
-
+             // Restaura o status de "interrompido" para que outras partes do código possam saber.
+    Thread.currentThread().interrupt();
         }
     }
 }
