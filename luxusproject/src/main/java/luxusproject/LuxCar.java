@@ -10,7 +10,6 @@ public class LuxCar implements DrawableItem {
     private Location location;
     private Location destination;
     private LuxCompany company;
-    private LuxCar car; // Atributo redundante
     private Image emptyImage, passengerImage;
     private int idleTime;
 
@@ -26,7 +25,7 @@ public class LuxCar implements DrawableItem {
 
     // Metodo criado: getTargetLocation envia o passageiro como parâmetro, devolve as coordenadas dele.
     public void act() {
-        Location target = getTargetLocation(passenger);
+            Location target = this.destination;
         if (target != null) {
             Location next = getLocation().nextLocation(target);
             setLocation(next);
@@ -65,16 +64,8 @@ public class LuxCar implements DrawableItem {
         System.out.println("Passenger " + passenger.getImage() + " arrival!");
     }
 
-    public Location getTargetLocation(Passenger passenger) {
-        return passenger.getPickupLocation();
-    }
-
     public boolean isFree() {
         return passenger == null; // Não precisa retornar boolean em relação a localização do passageiro
-    }
-
-    public void setPickupLocation(Location location) {
-        this.location = location;
     }
 
     // Adicionei o metodo setter de destino
