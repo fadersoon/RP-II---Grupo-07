@@ -23,18 +23,16 @@ public class LuxCompany {
     }
 
     public boolean requestPickup(Passenger passenger) {
-        Vehicle vehicle = scheduleVehicle();
-
-        if (vehicle != null && vehicle.isFree()) {
+        Vehicle vehicle = findNearestAvailableVehicle(passenger.getPickupLocation());
+        if (vehicle != null) {
             assignments.putIfAbsent(vehicle, new LinkedList<>());
             assignments.get(vehicle).add(passenger);
+
             if (vehicle instanceof LuxCar) {
                 vehicle.setDestination(passenger.getPickupLocation());
             } else if (vehicle instanceof Shuttle) {
-                Shuttle shuttle = (Shuttle) vehicle;
-                shuttle.setPickupLocation(passenger.getPickupLocation());
+                ((Shuttle) vehicle).setPickupLocation(passenger.getPickupLocation());
             }
-
             return true;
         } else {
             return false;
@@ -106,6 +104,22 @@ public class LuxCompany {
 
     public City getCity() {
         return city;
+    }
+
+    private Vehicle findNearestAvailableVehicle(Location passengerLocation) {
+        Vehicle nearestVehicle = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.isFree()) { // Ou algum critério para disponibilidade
+                int distance = vehicle.getLocation().distance(passengerLocation);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestVehicle = vehicle;
+                }
+            }
+        }
+        return nearestVehicle;
     }
 
     private void setupVehicles() {
