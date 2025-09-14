@@ -2,7 +2,6 @@ package luxusproject;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import java.util.Objects;
 
 public class LuxCar extends Vehicle {
 
@@ -17,24 +16,27 @@ public class LuxCar extends Vehicle {
         this.passenger = null;
         this.idleTime = 0;
 
-        this.emptyImage = new ImageIcon(getClass().getResource("/images/luxCar.jpg")).getImage();
+        this.emptyImage = new ImageIcon(getClass().getResource("/images/LuxCar.png")).getImage();
         this.passengerImage = new ImageIcon(getClass().getResource("/images/luxCar+person.jpg")).getImage();
     }
 
     @Override
     public void act() {
         Location target = getDestination();
+        Location currentLocation = getLocation();
 
         if (target != null) {
-            Location next = getLocation().nextLocation(target);
+            Location next = currentLocation.nextLocation(target);
             setLocation(next);
 
             if (next.equals(target)) {
                 if (passenger != null) {
                     System.out.println(getId() + " arrived at the destination with the passenger.");
+                    getCompany().arrivedAtDestination(this, passenger);
                     offloadPassenger();
                 } else {
                     System.out.println(getId() + " arrived at the starting point");
+                    getCompany().arrivedAtPickup(this);
                 }
             }
         } else {

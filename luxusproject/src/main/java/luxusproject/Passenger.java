@@ -30,7 +30,7 @@ public class Passenger implements DrawableItem {
         this.waitingTime = 0;
 
         // Tenta carregar imagem padrão
-        URL resource = getClass().getResource("/images/person.jpg");
+        URL resource = getClass().getResource("/images/person.png");
         if (resource != null) {
             this.image = new ImageIcon(resource).getImage();
         } else {

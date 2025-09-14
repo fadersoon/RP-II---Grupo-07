@@ -42,7 +42,7 @@ public class CityGUI extends JFrame implements Actor
 
     private class CityView extends JPanel
     {
-        private final int VIEW_SCALING_FACTOR = 6;
+        private final int VIEW_SCALING_FACTOR = 20;
 
         private int cityWidth, cityHeight;
         private int xScale, yScale;

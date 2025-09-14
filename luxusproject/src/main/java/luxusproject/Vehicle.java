@@ -21,7 +21,8 @@ public abstract class Vehicle implements DrawableItem, Actor {
 
     @Override
     public abstract void act();
-    
+
+
     @Override
     public abstract Image getImage();
     
@@ -55,5 +56,9 @@ public abstract class Vehicle implements DrawableItem, Actor {
     @Override
     public String toString() {
         return id + " at " + location;
+    }
+
+    public LuxCompany getCompany() {
+        return company;
     }
 }

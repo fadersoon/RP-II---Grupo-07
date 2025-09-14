@@ -11,7 +11,7 @@ public class Simulation {
     public Simulation() {
         actors = new LinkedList<Actor>();
         step = 0;
-        City city = new City();
+        City city = new City(30, 30);
         LuxCompany company = new LuxCompany(city);
         PassengerSource source = new PassengerSource(city, company);
 
