@@ -20,7 +20,7 @@ public class PassengerSource implements Actor {
         this.city = city;
         this.company = company;
 
-        rand = new Random(12345);
+        rand = new Random();
         missedPickups = 0;
     }
 

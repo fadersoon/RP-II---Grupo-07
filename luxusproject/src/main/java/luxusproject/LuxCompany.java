@@ -11,28 +11,30 @@ public class LuxCompany {
 
     private List<Vehicle> vehicles;
     private City city;
-    private Map<Vehicle, Passenger> assignments;
+    private Map<Vehicle, List<Passenger>> assignments;
 
-    private static final int TOTAL_LUXCARS = 5;
+    private static final int TOTAL_LUXCARS = 3;
 
     public LuxCompany(City city) {
         this.city = city;
-        vehicles = new LinkedList<Vehicle>();
-        assignments = new HashMap<Vehicle, Passenger>();
+        vehicles = new LinkedList<>();
+        assignments = new HashMap<>();
         setupVehicles();
     }
 
     public boolean requestPickup(Passenger passenger) {
         Vehicle vehicle = scheduleVehicle();
-        if (vehicle != null) {
-            assignments.put(vehicle, passenger);
+
+        if (vehicle != null && vehicle.isFree()) {
+            assignments.putIfAbsent(vehicle, new LinkedList<>());
+            assignments.get(vehicle).add(passenger);
             if (vehicle instanceof LuxCar) {
                 vehicle.setDestination(passenger.getPickupLocation());
-            }
-            else if (vehicle instanceof Shuttle) {
+            } else if (vehicle instanceof Shuttle) {
                 Shuttle shuttle = (Shuttle) vehicle;
                 shuttle.setPickupLocation(passenger.getPickupLocation());
             }
+
             return true;
         } else {
             return false;
@@ -40,22 +42,44 @@ public class LuxCompany {
     }
 
     public boolean isPickupLocation(Location location) {
-        for (Map.Entry<Vehicle, Passenger> entry : assignments.entrySet()) {
-            if (entry.getValue().getPickupLocation().equals(location)) {
-                return true;
+        for (List<Passenger> list : assignments.values()) {
+            for (Passenger p : list) {
+                if (p.getPickupLocation().equals(location)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     public void arrivedAtPickup(Vehicle vehicle) {
-        Passenger passenger = assignments.remove(vehicle);
-        if (passenger == null) {
+        List<Passenger> assigned = assignments.get(vehicle);
+        if (assigned == null || assigned.isEmpty()) {
+            System.out.println(vehicle.getId() + " arrived at pickup but no passengers assigned");
             throw new MissingPassengerException(vehicle);
         }
-        city.removeItem(passenger);
-        vehicle.pickup(passenger);
-        vehicle.setDestination(passenger.getDestination());
+
+        Iterator<Passenger> it = assigned.iterator();
+        while (it.hasNext()) {
+            Passenger passenger = it.next();
+            if (passenger.getPickupLocation().equals(vehicle.getLocation())) {
+                System.out.println(vehicle.getId() + " picking up " + passenger.getName() + " at " + passenger.getPickupLocation());
+                city.removeItem(passenger);
+                vehicle.pickup(passenger);
+                it.remove();
+
+                // Atualiza destino dependendo do tipo do veículo
+                if (vehicle instanceof Shuttle) {
+                    ((Shuttle) vehicle).setPickupLocation(passenger.getDestination());
+                } else if (vehicle instanceof LuxCar) {
+                    vehicle.setDestination(passenger.getDestination());
+                }
+            }
+        }
+
+        if (assigned.isEmpty()) {
+            assignments.remove(vehicle);
+        }
     }
 
     public void arrivedAtDestination(Vehicle vehicle, Passenger passenger) {
@@ -68,9 +92,7 @@ public class LuxCompany {
     }
 
     private Vehicle scheduleVehicle() {
-        Iterator<Vehicle> it = vehicles.iterator();
-        while (it.hasNext()) {
-            Vehicle vehicle = it.next();
+        for (Vehicle vehicle : vehicles) {
             if (vehicle.isFree()) {
                 return vehicle;
             }
@@ -78,18 +100,23 @@ public class LuxCompany {
         return null;
     }
 
+    public Map<Vehicle, List<Passenger>> getAssignments() {
+        return assignments;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
     private void setupVehicles() {
         int cityWidth = city.getWidth();
         int cityHeight = city.getHeight();
-
         Random rand = new Random(12345);
-
         Shuttle shuttle = new Shuttle(this,
                 new Location(rand.nextInt(cityWidth),
                         rand.nextInt(cityHeight)));
         vehicles.add(shuttle);
         city.addItem(shuttle);
-
         for (int i = 0; i < TOTAL_LUXCARS; i++) {
             LuxCar luxcar = new LuxCar(this,
                     new Location(rand.nextInt(cityWidth),
