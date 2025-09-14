@@ -12,6 +12,7 @@ public class Shuttle extends Vehicle
     private List<Passenger> passengers;
     private final Image emptyImage;
     private final Image passengerImage;
+    private static final int MAX_PASSENGERS = 3;
 
     public Shuttle(LuxCompany company, Location location)
     {
@@ -54,7 +55,7 @@ public class Shuttle extends Vehicle
     @Override
     public boolean isFree()
     {
-        return destinations.isEmpty() && passengers.isEmpty();
+        return passengers.size() < MAX_PASSENGERS;
     }
 
 
