@@ -13,6 +13,7 @@ public class Passenger implements DrawableItem {
     private Image image;
     private PassengerStatus status;
     private int waitingTime;
+    private static int nextId = 1;
 
     // Enum para o estado do passageiro
     public enum PassengerStatus {
@@ -36,6 +37,14 @@ public class Passenger implements DrawableItem {
             System.err.println("Warning: default passenger image not found.");
             this.image = null; // ou poderia ser uma imagem alternativa
         }
+    }
+
+    /**
+     * Construtor para criar um passageiro com nome/ID padrão.
+     */
+    public Passenger(Location pickup, Location destination) {
+        // Esta linha chama o outro construtor, passando um nome gerado automaticamente
+        this("Passenger #" + nextId++, pickup, destination);
     }
 
     @Override

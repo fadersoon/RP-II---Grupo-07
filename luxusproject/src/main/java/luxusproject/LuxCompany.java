@@ -26,7 +26,7 @@ public class LuxCompany {
         Vehicle vehicle = scheduleVehicle();
         if (vehicle != null) {
             assignments.put(vehicle, passenger);
-            vehicle.setPickupLocation(passenger.getPickupLocation());
+            vehicle.setDestination(passenger.getPickupLocation());
             return true;
         } else {
             return false;
