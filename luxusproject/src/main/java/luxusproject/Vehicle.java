@@ -10,13 +10,13 @@ public abstract class Vehicle implements DrawableItem, Actor {
     private Location destination;
 
     private final String id;
-    private static int nextId = 1;
+    protected static int nextId = 1;
 
     public Vehicle(LuxCompany company, Location location) {
         this.company = company;
         this.location = location;
         this.destination = null;
-        this.id = "Veículo " + nextId++;
+        this.id = getClass().getSimpleName() + " " + nextId++;
     }
 
     @Override
@@ -35,6 +35,10 @@ public abstract class Vehicle implements DrawableItem, Actor {
     @Override
     public Location getLocation() {
         return location;
+    }
+
+    public String getID() {
+        return id;
     }
 
     public void setLocation(Location location) {
