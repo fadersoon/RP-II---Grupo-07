@@ -44,7 +44,7 @@ public class Passenger implements DrawableItem {
      */
     public Passenger(Location pickup, Location destination) {
         // Esta linha chama o outro construtor, passando um nome gerado automaticamente
-        this("Passenger #" + nextId++, pickup, destination);
+        this("Passageiro n°" + nextId++, pickup, destination);
     }
 
     @Override

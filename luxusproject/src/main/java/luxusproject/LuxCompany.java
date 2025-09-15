@@ -53,7 +53,7 @@ public class LuxCompany {
     public void arrivedAtPickup(Vehicle vehicle) {
         List<Passenger> assigned = assignments.get(vehicle);
         if (assigned == null || assigned.isEmpty()) {
-            System.out.println(vehicle.getId() + " arrived at pickup but no passengers assigned");
+            System.out.println(vehicle.getId() + " chegou ao ponto de partida mas sem passageiro.");
             throw new MissingPassengerException(vehicle);
         }
 
@@ -61,7 +61,7 @@ public class LuxCompany {
         while (it.hasNext()) {
             Passenger passenger = it.next();
             if (passenger.getPickupLocation().equals(vehicle.getLocation())) {
-                System.out.println(vehicle.getId() + " picking up " + passenger.getName() + " at " + passenger.getPickupLocation());
+                System.out.println(vehicle.getId() + " pegando " + passenger.getName() + " no ponto: " + passenger.getPickupLocation());
                 city.removeItem(passenger);
                 vehicle.pickup(passenger);
                 it.remove();
@@ -82,7 +82,7 @@ public class LuxCompany {
 
     public void arrivedAtDestination(Vehicle vehicle, Passenger passenger) {
         passenger.setStatus(Passenger.PassengerStatus.ARRIVED);
-        System.out.println("Passageiro " + passenger.getName() + " chegou ao destino.");
+        System.out.println(passenger.getName() + " chegou ao destino.");
     }
 
     public List<Vehicle> getVehicles() {

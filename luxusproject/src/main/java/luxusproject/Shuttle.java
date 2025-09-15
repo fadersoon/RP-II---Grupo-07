@@ -106,7 +106,7 @@ public class Shuttle extends Vehicle
     }
 
     public void offloadPassenger(Passenger passenger) {
-        System.out.println(getId() + " dropped off " + passenger.getName() + " at " + passenger.getDestination());
+        System.out.println(getId() + " deixou o " + passenger.getName() + " no ponto: " + passenger.getDestination());
         getCompany().arrivedAtDestination(this, passenger); //
     }
 

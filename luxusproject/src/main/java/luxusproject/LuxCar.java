@@ -31,11 +31,11 @@ public class LuxCar extends Vehicle {
 
             if (next.equals(target)) {
                 if (passenger != null) {
-                    System.out.println(getId() + " arrived at the destination with the passenger.");
+                    System.out.println(getId() + " chegou ao destino com o passageiro.");
                     getCompany().arrivedAtDestination(this, passenger);
                     offloadPassenger();
                 } else {
-                    System.out.println(getId() + " arrived at the starting point");
+                    System.out.println(getId() + " chegou no ponto de partida.");
                     getCompany().arrivedAtPickup(this);
                 }
             }

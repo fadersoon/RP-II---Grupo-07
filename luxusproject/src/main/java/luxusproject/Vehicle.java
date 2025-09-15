@@ -16,7 +16,7 @@ public abstract class Vehicle implements DrawableItem, Actor {
         this.company = company;
         this.location = location;
         this.destination = null;
-        this.id = "V-" + nextId++;
+        this.id = "Veículo " + nextId++;
     }
 
     @Override

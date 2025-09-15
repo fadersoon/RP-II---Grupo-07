@@ -48,7 +48,7 @@ public class Location {
     }
 
     public String toString() {
-        return "location " + x + "," + y;
+        return (x + "," + y);
     }
 
     public int hashCode() {
