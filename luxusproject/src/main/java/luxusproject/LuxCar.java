@@ -65,4 +65,16 @@ public class LuxCar extends Vehicle {
         setDestination(null);
     }
 
+// Retorna o passageiro que está neste veículo.
+// Necessário para os testes verificarem o estado de embarque.
+    public Passenger getPassenger() {
+        return this.passenger;
+    }
+
+// Retorna o tempo de ociosidade acumulado do carro.
+// Necessário para os testes verificarem o comportamento do método act().
+    public int getIdleTime() {
+        return this.idleTime;
+    }
+
 }
