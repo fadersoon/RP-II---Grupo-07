@@ -112,7 +112,7 @@ public class LuxCompany {
         int minDistance = Integer.MAX_VALUE;
 
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.isFree()) { // Ou algum critério para disponibilidade
+            if (vehicle.isFree()) {
                 int distance = vehicle.getLocation().distance(passengerLocation);
                 if (distance < minDistance) {
                     minDistance = distance;
