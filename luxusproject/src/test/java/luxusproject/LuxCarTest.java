@@ -14,13 +14,24 @@ class LuxCarTest {
 
     @BeforeEach
     void setUp() {
-        city = new City();
-        company = new LuxCompany(city);
-        initialLocation = new Location(10, 10);
-
-        car = (LuxCar) company.getVehicles().get(0);
-        car.setLocation(initialLocation);
+    city = new City();
+    company = new LuxCompany(city);
+    initialLocation = new Location(10, 10);
+    
+    // Procura pelo primeiro LuxCar
+    for(Vehicle v : company.getVehicles()) {
+        if(v instanceof LuxCar) {
+            car = (LuxCar) v;
+            break; // Para o loop assim que encontrar o primeiro
+        }
     }
+    
+    // Garante que encontra um carro para testar
+    assertNotNull(car, "Nenhum LuxCar foi encontrado na frota para ser testado.");
+    
+    // Força a localização inicial conhecida
+    car.setLocation(initialLocation);
+}
 
     @Test
     @DisplayName("Um carro recém-criado deve estar livre e na localização inicial")
@@ -64,15 +75,12 @@ class LuxCarTest {
         assertNull(car.getDestination(), "O carro não deveria ter destino após o desembarque.");
     }
     
-    // ... (depois dos testes anteriores)
-
-    
      // Testa o cenário de movimento. 
      // Verifica se, ao ter um destino, o carro se move um passo em sua direção.
     @Test
     @DisplayName("act() deve mover o carro em direção ao destino")
     void actDeveMoverCarroQuandoTemDestino() {
-        // Carro um destino diferente de sua localização atual.
+        // Carro em um destino diferente de sua localização atual.
         Location destination = new Location(15, 15);
         car.setDestination(destination);
         Location locationBeforeAct = car.getLocation(); // Guarda posição original
@@ -99,9 +107,6 @@ class LuxCarTest {
         assertEquals(idleTimeBefore + 1, car.getIdleTime(), "O tempo ocioso deveria ter sido incrementado.");
         assertEquals(initialLocation, car.getLocation(), "O carro ocioso não deveria se mover.");
     }
-    
-    // ... (depois dos testes anteriores)
-
    
      // Testa o cenário de chegada.
     // Coloca o carro a um passo do destino, para que o método seja chamado somente uma vez, e verifica se o act() finaliza a viagem.
