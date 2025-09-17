@@ -13,9 +13,11 @@ public class Passenger implements DrawableItem {
     private Image image;
     private PassengerStatus status;
     private int waitingTime;
+
+    private Vehicle currentVehicle;
+
     private static int nextId = 1;
 
-    // Enum para o estado do passageiro
     public enum PassengerStatus {
         WAITING,
         IN_TRIP,
@@ -28,28 +30,57 @@ public class Passenger implements DrawableItem {
         this.destination = Objects.requireNonNull(destination, "Destination location cannot be null");
         this.status = PassengerStatus.WAITING;
         this.waitingTime = 0;
+        this.currentVehicle = null;
 
-        // Tenta carregar imagem padrão
-        URL resource = getClass().getResource("/images/person.png");
+        URL resource = getClass().getResource("/images/person.jpg");
         if (resource != null) {
             this.image = new ImageIcon(resource).getImage();
         } else {
             System.err.println("Warning: default passenger image not found.");
-            this.image = null; // ou poderia ser uma imagem alternativa
+            this.image = null;
         }
     }
 
-    /**
-     * Construtor para criar um passageiro com nome/ID padrão.
-     */
     public Passenger(Location pickup, Location destination) {
-        // Esta linha chama o outro construtor, passando um nome gerado automaticamente
-        this("Passageiro n°" + nextId++, pickup, destination);
+        this("Passenger #" + nextId++, pickup, destination);
     }
 
     @Override
     public Location getLocation() {
-        return pickup;
+        if (status == PassengerStatus.IN_TRIP && currentVehicle != null) {
+            return currentVehicle.getLocation();
+        } else if (status == PassengerStatus.ARRIVED) {
+            return destination;
+        } else { // WAITING
+            return pickup;
+        }
+    }
+
+    public void boardVehicle(Vehicle vehicle) {
+        this.currentVehicle = vehicle;
+        setStatus(PassengerStatus.IN_TRIP);
+    }
+
+    public void leaveVehicle() {
+        this.currentVehicle = null;
+        setStatus(PassengerStatus.ARRIVED);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Passenger passenger = (Passenger) o;
+        return name.equals(passenger.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     private static String validateName(String name) {
@@ -67,7 +98,6 @@ public class Passenger implements DrawableItem {
         );
     }
 
-    // --- Getters e Setters ---
     public String getName() {
         return name;
     }
@@ -88,6 +118,7 @@ public class Passenger implements DrawableItem {
         this.status = Objects.requireNonNull(status, "Status cannot be null");
     }
 
+    @Override
     public Image getImage() {
         return image;
     }
