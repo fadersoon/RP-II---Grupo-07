@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
+import java.util.Collections;
 
 public class LuxCompany {
 
@@ -86,7 +87,7 @@ public class LuxCompany {
     }
 
     public List<Vehicle> getVehicles() {
-        return vehicles;
+    return Collections.unmodifiableList(vehicles);
     }
 
     private Vehicle scheduleVehicle() {
