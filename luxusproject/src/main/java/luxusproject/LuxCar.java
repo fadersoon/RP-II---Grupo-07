@@ -44,10 +44,7 @@ public class LuxCar extends Vehicle {
         }
     }
 
-    @Override
-    public boolean isFree() {
-        return passenger == null && getDestination() == null;
-    }
+
 
     @Override
     public Image getImage() {
@@ -56,13 +53,16 @@ public class LuxCar extends Vehicle {
 
     @Override
     public void pickup(Passenger passenger) {
+
         this.passenger = passenger;
+        setOccupied(true);
     }
 
     @Override
     public void offloadPassenger() {
         this.passenger = null;
         setDestination(null);
+        setOccupied(false);
     }
 
 // Retorna o passageiro que está neste veículo.
