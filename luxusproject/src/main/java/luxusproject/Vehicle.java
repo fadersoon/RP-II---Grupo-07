@@ -8,6 +8,7 @@ public abstract class Vehicle implements DrawableItem, Actor {
     private final LuxCompany company;
     private Location location;
     private Location destination;
+    private boolean occupied;
 
     private final String id;
     protected static int nextId = 1;
@@ -17,6 +18,11 @@ public abstract class Vehicle implements DrawableItem, Actor {
         this.location = location;
         this.destination = null;
         this.id = getClass().getSimpleName() + " " + nextId++;
+        this.occupied = false;
+    }
+
+    public void setOccupied(boolean status){
+        this.occupied = status;
     }
 
     @Override
@@ -26,7 +32,9 @@ public abstract class Vehicle implements DrawableItem, Actor {
     @Override
     public abstract Image getImage();
     
-    public abstract boolean isFree();
+    public boolean isFree(){
+        return !occupied;
+    }
     
     public abstract void pickup(Passenger passenger);
 

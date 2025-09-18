@@ -31,6 +31,7 @@ public class LuxCompany {
 
             if (vehicle instanceof LuxCar) {
                 vehicle.setDestination(passenger.getPickupLocation());
+                vehicle.setOccupied(true);
             } else if (vehicle instanceof Shuttle) {
                 ((Shuttle) vehicle).setPickupLocation(passenger.getPickupLocation());
             }
