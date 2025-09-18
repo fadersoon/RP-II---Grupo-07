@@ -44,7 +44,7 @@ class LuxCompanyTest {
     @Test
     void testarSeRequestPickupFalhaQuandoTodosVeiculosEstaoOcupados(){
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 6; i++) {
 
             Passenger passageiroFantasma = new Passenger("Passenger" + i ,new Location(0,i),
                     new Location(1,i));
