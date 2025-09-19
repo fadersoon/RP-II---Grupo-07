@@ -77,4 +77,7 @@ public class LuxCar extends Vehicle {
         return this.idleTime;
     }
 
+    public int getCapacity() {
+        return 1;
+    }
 }

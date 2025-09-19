@@ -31,7 +31,9 @@ public abstract class Vehicle implements DrawableItem, Actor {
 
     @Override
     public abstract Image getImage();
-    
+
+    public abstract int getCapacity();
+
     public boolean isFree(){
         return !occupied;
     }
@@ -73,4 +75,5 @@ public abstract class Vehicle implements DrawableItem, Actor {
     public LuxCompany getCompany() {
         return company;
     }
+
 }
