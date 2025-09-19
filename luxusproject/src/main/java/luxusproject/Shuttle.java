@@ -118,4 +118,8 @@ public class Shuttle extends Vehicle
             return emptyImage;
         }
     }
+
+    public int getCapacity() {
+        return MAX_PASSENGERS;
+    }
 }
