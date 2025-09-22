@@ -25,6 +25,37 @@ class LocationTest {
             new Location(10, -1);
         });
     }
+
+    @Test
+    void testProximaLocalizacaoDeveMoverDiagonalmenteParaODestino() {
+        Location start = new Location(5, 5);
+        Location destination = new Location(10, 10);
+        Location expectedNext = new Location(6, 6);
+        assertEquals(expectedNext, start.nextLocation(destination));
+    }
+
+    @Test
+    void testProximaLocalizacaoDeveMoverHorizontalmenteParaODestino() {
+        Location start = new Location(5, 5);
+        Location destination = new Location(10, 5);
+        Location expectedNext = new Location(6, 5);
+        assertEquals(expectedNext, start.nextLocation(destination));
+    }
+
+    @Test
+    void testNextLocationDeveRetornarDestino() {
+        Location start = new Location(10, 10);
+        Location destination = new Location(10, 10);
+        assertEquals(destination, start.nextLocation(destination));
+    }
+
+
+    @Test
+    void testConstrutorDeveCriarUmaLocalizaçãoComCoordenadasValidas() {
+        Location loc = new Location(10, 20);
+        assertEquals(10, loc.getX(), "A coordenada X deveria ser 10");
+        assertEquals(20, loc.getY(), "A coordenada Y deveria ser 20");
+    }
+
+
 }
-    
-     
