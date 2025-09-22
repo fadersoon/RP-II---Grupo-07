@@ -60,7 +60,7 @@ class LuxCarTest {
       removendo o passageiro e o destino */
     @Test
     @DisplayName("Deve desembarcar um passageiro e ficar livre")
-    void offloadPassenger_deveLimparEstadoDoCarro() {
+    void offloadPassengerDeveLimparEstadoDoCarro() {
         Passenger passenger = new Passenger(new Location(10, 10), new Location(20, 20));
         car.pickup(passenger);
         car.setDestination(passenger.getDestination());
