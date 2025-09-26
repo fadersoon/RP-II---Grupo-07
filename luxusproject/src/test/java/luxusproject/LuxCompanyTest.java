@@ -127,16 +127,17 @@ class LuxCompanyTest {
                 .filter(v -> v instanceof LuxCar)
                 .forEach(luxCar -> luxCar.setLocation(new Location(100, 100)));
 
-        empresa.requestPickup(new Passenger(new Location(1, 1), new Location(2, 2)));
-        empresa.requestPickup(new Passenger(new Location(3, 3), new Location(4, 4)));
-        empresa.requestPickup(new Passenger(new Location(5, 5), new Location(6, 6)));
+        // Ocupa o Shuttle com 10 passageiros
+        for (int i = 1; i <= 10; i++) {
+            empresa.requestPickup(new Passenger(new Location(i, i), new Location(i + 1, i + 1)));
+        }
 
         assertFalse(shuttle.isFree(), "O Shuttle deveria estar ocupado após 3 atribuições.");
 
-        Passenger fourthPassenger = new Passenger(new Location(8, 8), new Location(9, 9));
+        Passenger eleventhPassenger = new Passenger(new Location(11, 11), new Location(12, 12));
 
 
-        boolean success = empresa.requestPickup(fourthPassenger);
+        boolean success = empresa.requestPickup(eleventhPassenger);
 
         assertTrue(success, "A empresa deveria conseguir atender o 4º passageiro com um LuxCar.");
 
