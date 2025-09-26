@@ -132,19 +132,19 @@ class LuxCompanyTest {
             empresa.requestPickup(new Passenger(new Location(i, i), new Location(i + 1, i + 1)));
         }
 
-        assertFalse(shuttle.isFree(), "O Shuttle deveria estar ocupado após 3 atribuições.");
+        assertFalse(shuttle.isFree(), "O Shuttle deveria estar ocupado após 11 atribuições.");
 
         Passenger eleventhPassenger = new Passenger(new Location(11, 11), new Location(12, 12));
 
 
         boolean success = empresa.requestPickup(eleventhPassenger);
 
-        assertTrue(success, "A empresa deveria conseguir atender o 4º passageiro com um LuxCar.");
+        assertTrue(success, "A empresa deveria conseguir atender o 11º passageiro com um LuxCar.");
 
-        Vehicle assignedVehicle = findVehicleForPassenger(fourthPassenger);
-        assertNotNull(assignedVehicle, "O 4º passageiro não foi atribuído a nenhum veículo.");
+        Vehicle assignedVehicle = findVehicleForPassenger(eleventhPassenger);
+        assertNotNull(assignedVehicle, "O 11º passageiro não foi atribuído a nenhum veículo.");
         assertTrue(assignedVehicle instanceof LuxCar,
-                "O 4º passageiro deveria ter sido atribuído a um LuxCar, pois o Shuttle estava cheio.");
+                "O 11º passageiro deveria ter sido atribuído a um LuxCar, pois o Shuttle estava cheio.");
     }
 
     @Test
