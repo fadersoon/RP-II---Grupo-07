@@ -12,7 +12,7 @@ public class Shuttle extends Vehicle
     private List<Passenger> passengers;
     private final Image emptyImage;
     private final Image passengerImage;
-    private final int MAX_PASSENGERS = 3;
+    private final int MAX_PASSENGERS = 10;
 
     public Shuttle(LuxCompany company, Location location)
     {
