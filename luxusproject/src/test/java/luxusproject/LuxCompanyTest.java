@@ -190,4 +190,18 @@ class LuxCompanyTest {
         }
         return null;
     }
+
+    @Test
+    @DisplayName("arrivedAtPickup deve lançar MissingPassengerException se o passageiro não estiver na lista")
+    void arrivedAtPickupDeveLancarExcecaoParaPassageiroAusente() {
+        Location pickupLocation = new Location(10, 10);
+        Vehicle vehicle = empresa.getVehicles().get(0);
+        vehicle.setLocation(pickupLocation);
+
+        // Simula a chegada a um local de embarque para o qual nenhum passageiro foi atribuído
+        // ou o passageiro foi removido indevidamente.
+        assertThrows(MissingPassengerException.class, () -> {
+            empresa.arrivedAtPickup(vehicle);
+        }, "Deveria lançar MissingPassengerException quando não há passageiros atribuídos no local.");
+    }
 }
