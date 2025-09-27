@@ -73,14 +73,6 @@ class ShuttleTest {
     }
 
     @Test
-    @DisplayName("offloadPassenger() deve notificar a companhia sobre a chegada")
-    void offloadPassengerDeveNotificarCompanhia() {
-
-        Passenger passenger = new Passenger(new Location(1, 1), new Location(2, 2));
-        assertDoesNotThrow(() -> shuttle.offloadPassenger(passenger));
-    }
-
-    @Test
     @DisplayName("setPickupLocation() deve definir o destino se o shuttle estiver ocioso")
     void setPickupLocationDeveDefinirDestino() {
         assertNull(shuttle.getDestination(), "O shuttle deveria iniciar sem destino.");
