@@ -127,23 +127,24 @@ class LuxCompanyTest {
                 .filter(v -> v instanceof LuxCar)
                 .forEach(luxCar -> luxCar.setLocation(new Location(100, 100)));
 
-        empresa.requestPickup(new Passenger(new Location(1, 1), new Location(2, 2)));
-        empresa.requestPickup(new Passenger(new Location(3, 3), new Location(4, 4)));
-        empresa.requestPickup(new Passenger(new Location(5, 5), new Location(6, 6)));
+        // Ocupa o Shuttle com 10 passageiros
+        for (int i = 1; i <= 10; i++) {
+            empresa.requestPickup(new Passenger(new Location(i, i), new Location(i + 1, i + 1)));
+        }
 
-        assertFalse(shuttle.isFree(), "O Shuttle deveria estar ocupado após 3 atribuições.");
+        assertFalse(shuttle.isFree(), "O Shuttle deveria estar ocupado após 11 atribuições.");
 
-        Passenger fourthPassenger = new Passenger(new Location(8, 8), new Location(9, 9));
+        Passenger eleventhPassenger = new Passenger(new Location(11, 11), new Location(12, 12));
 
 
-        boolean success = empresa.requestPickup(fourthPassenger);
+        boolean success = empresa.requestPickup(eleventhPassenger);
 
-        assertTrue(success, "A empresa deveria conseguir atender o 4º passageiro com um LuxCar.");
+        assertTrue(success, "A empresa deveria conseguir atender o 11º passageiro com um LuxCar.");
 
-        Vehicle assignedVehicle = findVehicleForPassenger(fourthPassenger);
-        assertNotNull(assignedVehicle, "O 4º passageiro não foi atribuído a nenhum veículo.");
+        Vehicle assignedVehicle = findVehicleForPassenger(eleventhPassenger);
+        assertNotNull(assignedVehicle, "O 11º passageiro não foi atribuído a nenhum veículo.");
         assertTrue(assignedVehicle instanceof LuxCar,
-                "O 4º passageiro deveria ter sido atribuído a um LuxCar, pois o Shuttle estava cheio.");
+                "O 11º passageiro deveria ter sido atribuído a um LuxCar, pois o Shuttle estava cheio.");
     }
 
     @Test
@@ -188,5 +189,19 @@ class LuxCompanyTest {
             }
         }
         return null;
+    }
+
+    @Test
+    @DisplayName("arrivedAtPickup deve lançar MissingPassengerException se o passageiro não estiver na lista")
+    void arrivedAtPickupDeveLancarExcecaoParaPassageiroAusente() {
+        Location pickupLocation = new Location(10, 10);
+        Vehicle vehicle = empresa.getVehicles().get(0);
+        vehicle.setLocation(pickupLocation);
+
+        // Simula a chegada a um local de embarque para o qual nenhum passageiro foi atribuído
+        // ou o passageiro foi removido indevidamente.
+        assertThrows(MissingPassengerException.class, () -> {
+            empresa.arrivedAtPickup(vehicle);
+        }, "Deveria lançar MissingPassengerException quando não há passageiros atribuídos no local.");
     }
 }
