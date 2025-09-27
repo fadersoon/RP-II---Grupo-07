@@ -25,44 +25,47 @@ public class Shuttle extends Vehicle
     }
 
     public void act() {
-        Location currentLocation = getLocation();
-
-        if (getDestination() != null) {
-            Location next = currentLocation.nextLocation(getDestination());
-            setLocation(next);
-
-            if (next.equals(getDestination())) {
-
-                if (getCompany().isPickupLocation(getDestination())) {
-                    getCompany().arrivedAtPickup(this);
-                }
-
-                if (!passengers.isEmpty()) {
-                    Iterator<Passenger> it = passengers.iterator();
-                    while (it.hasNext()) {
-                        Passenger passenger = it.next();
-
-                        if (passenger.getDestination().equals(getDestination())) {
-                            getCompany().arrivedAtDestination(this, passenger);
-                            offloadPassenger(passenger);
-                            it.remove();
-                        }
-                    }
-                }
-                if (getCompany().isPickupLocation(getDestination())) {
-                    getCompany().arrivedAtPickup(this);
-                    if (!getCompany().isPickupLocation(getDestination())) {
-                        destinations.remove(0);
-                        chooseTargetLocation();
-                    }
-                } else {
-                    destinations.remove(0);
-                    chooseTargetLocation();
-                }
-            }
-        }
+    Location destination = getDestination();
+    if (destination == null) {
+        return; // Não faz nada se não tiver destino
     }
 
+    Location currentLocation = getLocation();
+    Location nextLocation = currentLocation.nextLocation(destination);
+    setLocation(nextLocation);
+
+    // Se chegou ao destino
+    if (nextLocation.equals(destination)) {
+        // Primeiro, desembarca quem precisa descer aqui
+        offloadPassengersAtCurrentLocation();
+        
+        // Depois, embarca quem está esperando aqui
+        if (getCompany().isPickupLocation(destination)) {
+            getCompany().arrivedAtPickup(this);
+        }
+        
+        // Por fim, define o próximo alvo
+        destinations.remove(0);
+        chooseTargetLocation();
+    }
+}
+    
+   private void offloadPassengersAtCurrentLocation() {
+    if (passengers.isEmpty()) {
+        return;
+    }
+    
+    Iterator<Passenger> it = passengers.iterator();
+    while (it.hasNext()) {
+        Passenger passenger = it.next();
+        if (passenger.getDestination().equals(getLocation())) {
+            System.out.println(getId() + " deixou o " + passenger.getName() + " no ponto: " + passenger.getDestination());
+            getCompany().arrivedAtDestination(this, passenger);
+            it.remove(); // Remove o passageiro da lista do shuttle
+        }
+    }
+}
+    
     public boolean isFree() {
         return passengers.size() + getAssignedPassengerCount() < MAX_PASSENGERS;
     }
@@ -103,11 +106,6 @@ public class Shuttle extends Vehicle
 
     @Override
     public void offloadPassenger(){
-    }
-
-    public void offloadPassenger(Passenger passenger) {
-        System.out.println(getId() + " deixou o " + passenger.getName() + " no ponto: " + passenger.getDestination());
-        getCompany().arrivedAtDestination(this, passenger); //
     }
 
     @Override
