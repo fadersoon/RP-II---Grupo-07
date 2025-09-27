@@ -54,7 +54,7 @@ class ShuttleTest {
     void isFreeDeveSerFalsoParaShuttleLotado() {
         // Atribui 10 passageiros para lotar o shuttle
         for (int i = 0; i < shuttle.getCapacity(); i++) {
-            Passenger p = new Passenger(new Location(i, i), new Location(i+1, i+1));
+            Passenger p = new Passenger(new Location(i, i), new Location(i + 1, i + 1));
             company.requestPickup(p);
         }
 
@@ -148,7 +148,7 @@ class ShuttleTest {
         assertNotNull(emptyImage);
 
         // Embarca um passageiro
-        shuttle.pickup(new Passenger(new Location(1,1), new Location(2,2)));
+        shuttle.pickup(new Passenger(new Location(1, 1), new Location(2, 2)));
         Image passengerImage = shuttle.getImage();
         assertNotNull(passengerImage);
 
@@ -156,4 +156,31 @@ class ShuttleTest {
         // Caso modificado para imagens diferentes, o teste devera ser mudado pra "assertNotEquals"
         assertEquals(emptyImage, passengerImage, "A imagem deveria ser a mesma com ou sem passageiros, conforme a implementação atual.");
     }
+
+    @Test
+    @DisplayName("chooseTargetLocation() deve definir o primeiro destino da lista via setPickupLocation")
+    void chooseTargetLocationDeveDefinirOPrimeiroDestino() {
+        // Cenário: O shuttle não tem destino e um local de pickup é definido.
+        // setPickupLocation() adiciona o local à lista de destinos e chama chooseTargetLocation().
+        assertNull(shuttle.getDestination(), "O shuttle deve iniciar sem destino.");
+
+        Location pickupLocation = new Location(20, 20);
+        shuttle.setPickupLocation(pickupLocation);
+
+        // O destino do shuttle deve ser o local de pickup, pois é o primeiro e único na lista.
+        assertEquals(pickupLocation, shuttle.getDestination(),
+                "O destino deveria ser o primeiro da lista");
+    }
+
+    @Test
+    @DisplayName("chooseTargetLocation() deve garantir que o objeto ao ser criado nasce null sem destino definido")
+    void chooseTargetLocationGaranteEstadoInicial() {
+        // Cenário: O shuttle é recém-criado e a lista de destinos está vazia.
+        // O método setUp() já garante que o destino é nulo, então este teste verifica o estado inicial.
+        assertNull(shuttle.getDestination(), "O destino de um shuttle recém-criado deve ser nulo.");
+    }
+
+
+
 }
+
