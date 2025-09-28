@@ -9,8 +9,8 @@ public class CityGUI extends JFrame implements Actor
 {
     public static final int CITY_VIEW_WIDTH = 600;
     public static final int CITY_VIEW_HEIGHT = 600;
-    private City city;
-    private CityView cityView;
+    public City city;
+    public static CityView cityView;
     
 
     public CityGUI(City city)
@@ -40,6 +40,7 @@ public class CityGUI extends JFrame implements Actor
         }
     }
 
+
     public void act()
     {
         cityView.preparePaint();
@@ -55,7 +56,7 @@ public class CityGUI extends JFrame implements Actor
     }
     
 
-    private class CityView extends JPanel
+    public static class CityView extends JPanel
     {
         private final int VIEW_SCALING_FACTOR = 20;
 
