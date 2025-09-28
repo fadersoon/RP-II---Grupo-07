@@ -22,7 +22,22 @@ public class CityGUI extends JFrame implements Actor
         setSize(CITY_VIEW_WIDTH, CITY_VIEW_HEIGHT);
         setVisible(true);
         cityView.preparePaint();
-        cityView.repaint();    
+        cityView.repaint();
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the system default.
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception ex) {
+                // Handle exception
+            }
+        }
     }
 
     public void act()
@@ -65,7 +80,8 @@ public class CityGUI extends JFrame implements Actor
             return new Dimension(cityWidth * VIEW_SCALING_FACTOR,
                                  cityHeight * VIEW_SCALING_FACTOR);
         }
-        
+
+
 
         public void preparePaint()
         {
@@ -83,18 +99,27 @@ public class CityGUI extends JFrame implements Actor
                     yScale = VIEW_SCALING_FACTOR;
                 }
             }
-            g.setColor(Color.white);
+            // Fundo gradiente com tons de cinza mais neutros
+            GradientPaint gp = new GradientPaint(0, 0, new Color(245, 245, 245), size.width, size.height, new Color(230, 230, 230));
+            ((Graphics2D) g).setPaint(gp);
             g.fillRect(0, 0, size.width, size.height);
-            g.setColor(Color.gray);
+
+            // Linhas de grade ainda mais sutis
+            g.setColor(new Color(210, 210, 210, 100)); // Cinza muito claro e mais transparente
             for(int i = 0, x = 0; x < size.width; i++, x = i * xScale) {
                 g.drawLine(x, 0, x, size.height - 1);
             }
             for(int i = 0, y = 0; y < size.height; i++, y = i * yScale) {
                 g.drawLine(0, y, size.width - 1, y);
             }
+
+            // Borda mais suave ao redor da grade
+            g.setColor(new Color(180, 180, 180)); // Cinza médio para a borda
+            g.drawRect(0, 0, size.width - 1, size.height - 1);
         }
-        
-   
+
+
+
         public void drawImage(int x, int y, Image image)
         {
             g.drawImage(image, x * xScale + 1, y * yScale + 1,
