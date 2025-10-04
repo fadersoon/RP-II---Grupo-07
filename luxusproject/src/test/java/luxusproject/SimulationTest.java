@@ -7,8 +7,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 
-class SimulationIntegrationTest {
-
+class SimulationTest {
 
     @Test
     void testConstructorCreatesAndPopulatesActors() {
@@ -38,7 +37,6 @@ class SimulationIntegrationTest {
             Simulation simulation = new Simulation();
 
             simulation.step();
-
 
             Field stepField = Simulation.class.getDeclaredField("step");
             stepField.setAccessible(true);

@@ -34,7 +34,7 @@ class ShuttleTest {
     }
 
 
-    @Test
+    @Test   
     @DisplayName("Um shuttle recém-criado deve estar livre e na localização correta")
     void shuttleNovoDeveTerEstadoInicialCorreto() {
         assertTrue(shuttle.isFree(), "Um shuttle novo deveria estar livre.");

@@ -36,7 +36,8 @@ class VehicleTest {
     @BeforeEach
     void setUp() {
         // Usamos as classes reais do projeto
-        testCompany = new LuxCompany();
+        City city = new City();
+        testCompany = new LuxCompany(city);
         initialLocation = new Location(10, 20);
         // Reseta o contador estático para que os testes de ID sejam previsíveis
         Vehicle.nextId = 1;
