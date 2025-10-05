@@ -124,7 +124,7 @@ public class LuxCompany {
         return nearestVehicle;
     }
 
-    private void setupVehicles() {
+    protected void setupVehicles() {
         int cityWidth = city.getWidth();
         int cityHeight = city.getHeight();
         Random rand = new Random(12345);

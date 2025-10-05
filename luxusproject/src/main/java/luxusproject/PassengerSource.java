@@ -10,7 +10,7 @@ public class PassengerSource implements Actor {
     private static final double CREATION_PROBABILITY = 0.06;
     private int missedPickups;
 
-    public PassengerSource(City city, LuxCompany company) {
+    public PassengerSource(City city, LuxCompany company, Random random) {
         if (city == null) {
             throw new NullPointerException("city");
         }
@@ -20,8 +20,12 @@ public class PassengerSource implements Actor {
         this.city = city;
         this.company = company;
 
-        rand = new Random(1234);
+        this.rand = random;
         missedPickups = 0;
+    }
+
+    public PassengerSource(City city, LuxCompany company) {
+        this(city, company, new Random(1234));
     }
 
     public void act() {

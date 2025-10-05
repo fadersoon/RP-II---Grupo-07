@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 class PassengerSourceTest {
 
@@ -12,13 +15,9 @@ class PassengerSourceTest {
     private PassengerSource passengerSource;
 
 
-    private class StubCity extends City {
+    private static class StubCity extends City {
         public int addItemCallCount = 0;
         public Item lastAddedItem = null;
-
-        public StubCity() {
-            super(100, 100);
-        }
 
         @Override
         public void addItem(Item item) {
@@ -27,9 +26,8 @@ class PassengerSourceTest {
         }
     }
 
-    private class StubLuxCompany extends LuxCompany {
+    private static class StubLuxCompany extends LuxCompany {
         public int requestPickupCallCount = 0;
-        public Passenger lastRequestedPassenger = null;
         public boolean shouldSucceed = true;
 
         public StubLuxCompany(City city) {
@@ -39,8 +37,13 @@ class PassengerSourceTest {
         @Override
         public boolean requestPickup(Passenger passenger) {
             this.requestPickupCallCount++;
-            this.lastRequestedPassenger = passenger;
             return this.shouldSucceed;
+        }
+
+        // AGORA ISTO VAI FUNCIONAR CORRETAMENTE
+        @Override
+        protected void setupVehicles() {
+            // Vazio de propósito para não adicionar veículos durante os testes.
         }
     }
 
@@ -49,25 +52,29 @@ class PassengerSourceTest {
     void setUp() {
         stubCity = new StubCity();
         stubCompany = new StubLuxCompany(stubCity);
-        passengerSource = new PassengerSource(stubCity, stubCompany);
     }
 
     @Test
     void testConstructorThrowsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> {
-            new PassengerSource(null, stubCompany);
-        }, "Deveria lançar exceção para City nulo.");
+        assertThrows(NullPointerException.class, () -> new PassengerSource(null, stubCompany),
+                "Deveria lançar exceção para City nulo.");
 
-        assertThrows(NullPointerException.class, () -> {
-            new PassengerSource(stubCity, null);
-        }, "Deveria lançar exceção para LuxCompany nula.");
+        assertThrows(NullPointerException.class, () -> new PassengerSource(stubCity, null),
+                "Deveria lançar exceção para LuxCompany nula.");
     }
 
 
     @Test
     void testActDoesNothingWhenProbabilityIsLow() {
+        Random predictableRandom = new Random() {
+            @Override
+            public double nextDouble() {
+                return 0.5; // Valor > 0.06
+            }
+        };
+        passengerSource = new PassengerSource(stubCity, stubCompany, predictableRandom);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 100; i++) {
             passengerSource.act();
         }
 
@@ -79,12 +86,23 @@ class PassengerSourceTest {
 
     @Test
     void testActCreatesPassengerAndPickupSucceeds() {
-
         stubCompany.shouldSucceed = true;
-        for (int i = 0; i < 8; i++) {
+
+        final AtomicInteger callCount = new AtomicInteger(0);
+        Random predictableRandom = new Random() {
+            @Override
+            public double nextDouble() {
+                if (callCount.getAndIncrement() == 4) {
+                    return 0.01; // Valor < 0.06
+                }
+                return 0.5;
+            }
+        };
+        passengerSource = new PassengerSource(stubCity, stubCompany, predictableRandom);
+
+        for (int i = 0; i < 5; i++) {
             passengerSource.act();
         }
-
 
         assertEquals(1, stubCompany.requestPickupCallCount, "requestPickup deveria ter sido chamado uma vez.");
         assertEquals(1, stubCity.addItemCallCount, "addItem deveria ter sido chamado uma vez.");
@@ -95,12 +113,23 @@ class PassengerSourceTest {
 
     @Test
     void testActCreatesPassengerAndPickupFails() {
-
         stubCompany.shouldSucceed = false;
-        for (int i = 0; i < 8; i++) {
+
+        final AtomicInteger callCount = new AtomicInteger(0);
+        Random predictableRandom = new Random() {
+            @Override
+            public double nextDouble() {
+                if (callCount.getAndIncrement() == 2) {
+                    return 0.01; // Cria o passageiro
+                }
+                return 0.5; // Não cria
+            }
+        };
+        passengerSource = new PassengerSource(stubCity, stubCompany, predictableRandom);
+
+        for (int i = 0; i < 3; i++) {
             passengerSource.act();
         }
-
 
         assertEquals(1, stubCompany.requestPickupCallCount, "requestPickup deveria ter sido chamado uma vez.");
         assertEquals(0, stubCity.addItemCallCount, "addItem NÃO deveria ser chamado em caso de falha no pickup.");

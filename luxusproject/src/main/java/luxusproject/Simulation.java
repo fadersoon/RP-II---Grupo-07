@@ -22,13 +22,13 @@ public class Simulation {
 
     public void run() {
         for (int i = 0; i < 500; i++) {
-            step++;
             step();
             wait(150);
         }
     }
 
     public void step() {
+        step++;
         for (Actor actor : actors) {
             actor.act();
         }
