@@ -65,7 +65,7 @@ public class LuxCar extends Vehicle {
         setOccupied(false);
     }
 
-// Retorna o passageiro que está neste veículo.
+// Retorna o passageiro que está neste veículo
 // Necessário para os testes verificarem o estado de embarque.
     public Passenger getPassenger() {
         return this.passenger;
