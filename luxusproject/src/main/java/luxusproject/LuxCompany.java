@@ -17,10 +17,19 @@ public class LuxCompany {
     private static final int TOTAL_LUXCARS = 3;
 
     public LuxCompany(City city) {
+        if (city == null) {
+            throw new IllegalArgumentException("City cannot be null.");
+        }
         this.city = city;
         vehicles = new LinkedList<>();
         assignments = new HashMap<>();
         setupVehicles();
+
+
+    }
+
+    public LuxCompany() {
+
     }
 
     public boolean requestPickup(Passenger passenger) {

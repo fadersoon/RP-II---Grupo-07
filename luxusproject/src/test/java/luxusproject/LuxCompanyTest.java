@@ -24,7 +24,9 @@ class LuxCompanyTest {
 
     @Test
     void testarSeACompanhiaIniciaCom4Veiculos() {
+
         assertEquals(4, empresa.getVehicles().size(),"A empresa deve iniciar com 4 veículos.");
+        System.out.println("Inicia com 4 veículos");
     }
 
     @Test
