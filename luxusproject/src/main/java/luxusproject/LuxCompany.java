@@ -28,10 +28,6 @@ public class LuxCompany {
 
     }
 
-    public LuxCompany() {
-
-    }
-
     public boolean requestPickup(Passenger passenger) {
         Vehicle vehicle = findNearestAvailableVehicle(passenger.getPickupLocation());
         if (vehicle != null) {
